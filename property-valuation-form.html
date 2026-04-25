@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Property Valuation Confirmation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #f4f5f7;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 16px 60px;
+      color: #1a1a2e;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+      max-width: 580px;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      padding: 40px 40px 32px;
+      color: #fff;
+    }
+
+    .card-header .logo-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .logo-mark svg {
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+
+    .logo-mark span {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.75;
+    }
+
+    .card-header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .card-header p {
+      font-size: 14px;
+      opacity: 0.7;
+      line-height: 1.6;
+    }
+
+    .card-body {
+      padding: 36px 40px 40px;
+    }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #8a8fa8;
+      margin-bottom: 16px;
+      margin-top: 28px;
+    }
+
+    .section-label:first-of-type { margin-top: 0; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #eef0f5;
+      margin: 28px 0 0;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .field-grid .full { grid-column: 1 / -1; }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #4a4f6a;
+      letter-spacing: 0.02em;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="date"],
+    input[type="time"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid #e2e5ef;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #1a1a2e;
+      background: #fafbfd;
+      transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+      appearance: none;
+      -webkit-appearance: none;
+      outline: none;
+      font-family: inherit;
+    }
+
+    input[readonly], select[disabled] {
+      background: #f0f2f8;
+      color: #6b7196;
+      cursor: default;
+      border-color: #e2e5ef;
+    }
+
+    input:not([readonly]):focus,
+    select:not([disabled]):focus,
+    textarea:focus {
+      border-color: #0f3460;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(15,52,96,0.08);
+    }
+
+    .select-wrap {
+      position: relative;
+    }
+
+    .select-wrap::after {
+      content: '';
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid #8a8fa8;
+      pointer-events: none;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .address-note {
+      font-size: 11px;
+      color: #9aa0bb;
+      margin-top: 2px;
+    }
+
+    .appointment-banner {
+      background: linear-gradient(135deg, #eef6ff 0%, #f0f4ff 100%);
+      border: 1.5px solid #d0deff;
+      border-radius: 10px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .appointment-banner svg {
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .appointment-banner .banner-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #0f3460;
+      margin-bottom: 4px;
+    }
+
+    .appointment-banner .banner-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f3460;
+      letter-spacing: -0.01em;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #0f3460 0%, #1a4f8c 100%);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      margin-top: 32px;
+      transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(15,52,96,0.28);
+      font-family: inherit;
+    }
+
+    .submit-btn:hover { opacity: 0.92; box-shadow: 0 6px 20px rgba(15,52,96,0.34); }
+    .submit-btn:active { transform: scale(0.99); }
+    .submit-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+    /* Success state */
+    #success-screen {
+      display: none;
+      padding: 56px 40px 60px;
+      text-align: center;
+    }
+
+    .success-icon {
+      width: 72px;
+      height: 72px;
+      background: linear-gradient(135deg, #0f3460, #1a4f8c);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .success-icon svg { color: #fff; }
+
+    #success-screen h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
+    }
+
+    #success-screen p {
+      font-size: 14px;
+      color: #6b7196;
+      line-height: 1.7;
+      max-width: 380px;
+      margin: 0 auto;
+    }
+
+    .success-detail {
+      background: #f4f5f7;
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin: 24px auto 0;
+      max-width: 380px;
+      text-align: left;
+    }
+
+    .success-detail .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 13px;
+      padding: 5px 0;
+    }
+
+    .success-detail .row .key { color: #8a8fa8; font-weight: 500; }
+    .success-detail .row .val { color: #1a1a2e; font-weight: 600; text-align: right; }
+
+    /* Error message */
+    .error-msg {
+      display: none;
+      background: #fff0f0;
+      border: 1.5px solid #ffc8c8;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #c0392b;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 540px) {
+      body { padding: 0 0 40px; align-items: flex-start; }
+      .card { border-radius: 0; box-shadow: none; max-width: 100%; }
+      .card-header { padding: 28px 20px 24px; }
+      .card-header h1 { font-size: 22px; }
+      .card-body { padding: 24px 20px 32px; }
+      .field-grid { grid-template-columns: 1fr; }
+      .field-grid .full { grid-column: 1; }
+      #success-screen { padding: 40px 20px 48px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="card-header">
+    <div class="logo-mark">
+      <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 2L3 9V26H11V18H17V26H25V9L14 2Z" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="M14 2L3 9" stroke="rgba(255,255,255,0.9)" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M14 2L25 9" stroke="rgba(255,255,255,0.9)" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <span>Property Valuation</span>
+    </div>
+    <h1>Confirm Your Valuation Appointment</h1>
+    <p>Please review your details below and confirm your property valuation booking.</p>
+  </div>
+
+  <div class="card-body">
+    <!-- Appointment banner (populated by JS) -->
+    <div class="appointment-banner" id="appt-banner">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24">
+        <rect x="3" y="4" width="18" height="17" rx="2.5" stroke="#0f3460" stroke-width="1.8"/>
+        <path d="M8 2v4M16 2v4M3 9h18" stroke="#0f3460" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="12" cy="15" r="2.5" fill="#0f3460" opacity="0.35"/>
+        <path d="M12 13v2l1.5 1.5" stroke="#0f3460" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <div class="banner-label">Your Appointment</div>
+        <div class="banner-value" id="appt-display">—</div>
+      </div>
+    </div>
+
+    <form id="valuation-form" novalidate>
+      <input type="hidden" id="resume_url" name="resume_url" />
+
+      <!-- Contact Details -->
+      <div class="section-label">Contact Details</div>
+      <div class="field-grid">
+        <div class="field">
+          <label for="first_name">First Name</label>
+          <input type="text" id="first_name" name="first_name" readonly />
+        </div>
+        <div class="field">
+          <label for="phone_number">Phone Number</label>
+          <input type="tel" id="phone_number" name="phone_number" readonly />
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <!-- Property Details -->
+      <div class="section-label">Property Details</div>
+      <div class="field-grid">
+        <div class="field">
+          <label for="property_type">Property Type</label>
+          <input type="text" id="property_type" name="property_type" readonly />
+        </div>
+        <div class="field">
+          <label for="property_status">Property Status</label>
+          <input type="text" id="property_status" name="property_status" readonly />
+        </div>
+        <div class="field">
+          <label for="bedrooms">Number of Bedrooms</label>
+          <input type="text" id="bedrooms" name="bedrooms" readonly />
+        </div>
+        <div class="field">
+          <label for="requested_management_type">Management Type</label>
+          <input type="text" id="requested_management_type" name="requested_management_type" readonly />
+        </div>
+        <div class="field full">
+          <label for="property_address">Property Address <span style="color:#c0392b">*</span></label>
+          <input type="text" id="property_address" name="property_address"
+                 placeholder="Enter the full property address…" required />
+          <span class="address-note">Please provide the full street address including postcode.</span>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <!-- Appointment Details -->
+      <div class="section-label">Appointment Details</div>
+      <div class="field-grid">
+        <div class="field">
+          <label for="valuation_date">Valuation Date</label>
+          <input type="text" id="valuation_date" name="valuation_date" readonly />
+        </div>
+        <div class="field">
+          <label for="valuation_time">Valuation Time</label>
+          <input type="text" id="valuation_time" name="valuation_time" readonly />
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submit-btn">Confirm Valuation</button>
+      <div class="error-msg" id="error-msg"></div>
+    </form>
+  </div>
+
+  <!-- Success screen -->
+  <div id="success-screen">
+    <div class="success-icon">
+      <svg width="36" height="36" fill="none" viewBox="0 0 24 24">
+        <path d="M5 12.5l5 5L19 7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h2>Valuation Confirmed!</h2>
+    <p>Thank you — your property valuation has been successfully booked. You'll receive a confirmation shortly.</p>
+    <div class="success-detail" id="success-detail"></div>
+  </div>
+</div>
+
+<script>
+  // ── Read query params ──────────────────────────────────────────────────────
+  const params = new URLSearchParams(window.location.search);
+
+  const fields = [
+    'first_name', 'phone_number', 'property_type', 'property_status',
+    'bedrooms', 'requested_management_type', 'valuation_date',
+    'valuation_time', 'resume_url'
+  ];
+
+  fields.forEach(key => {
+    const el = document.getElementById(key);
+    if (el && params.has(key)) el.value = params.get(key);
+  });
+
+  // ── Appointment banner ─────────────────────────────────────────────────────
+  const date = params.get('valuation_date') || '';
+  const time = params.get('valuation_time') || '';
+  if (date || time) {
+    let display = '';
+    if (date) {
+      // Try to format as "Thursday, 1 May 2025"
+      try {
+        const d = new Date(date);
+        if (!isNaN(d)) {
+          display = d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+        } else {
+          display = date;
+        }
+      } catch { display = date; }
+    }
+    if (time) display += (display ? ' at ' : '') + time;
+    document.getElementById('appt-display').textContent = display;
+  }
+
+  // ── Submit ─────────────────────────────────────────────────────────────────
+  document.getElementById('valuation-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const addressEl = document.getElementById('property_address');
+    const errEl = document.getElementById('error-msg');
+    errEl.style.display = 'none';
+
+    if (!addressEl.value.trim()) {
+      addressEl.focus();
+      errEl.textContent = 'Please enter the property address before confirming.';
+      errEl.style.display = 'block';
+      return;
+    }
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Submitting…';
+
+    const payload = {
+      first_name:                  document.getElementById('first_name').value,
+      phone_number:                document.getElementById('phone_number').value,
+      property_type:               document.getElementById('property_type').value,
+      property_status:             document.getElementById('property_status').value,
+      bedrooms:                    document.getElementById('bedrooms').value,
+      requested_management_type:   document.getElementById('requested_management_type').value,
+      valuation_date:              document.getElementById('valuation_date').value,
+      valuation_time:              document.getElementById('valuation_time').value,
+      property_address:            addressEl.value.trim(),
+      resume_url:                  document.getElementById('resume_url').value,
+    };
+
+    try {
+      const res = await fetch(
+        'https://n8n.genesislegalsystems.com/webhook/5183d3a3-cddd-4c19-a456-75a420f2ecd3',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!res.ok) throw new Error(`Server responded with ${res.status}`);
+
+      // Show success
+      document.getElementById('valuation-form').parentElement.style.display = 'none';
+      const successScreen = document.getElementById('success-screen');
+      successScreen.style.display = 'block';
+
+      // Populate success detail
+      const rows = [
+        ['Name',        payload.first_name],
+        ['Phone',       payload.phone_number],
+        ['Property',    payload.property_address],
+        ['Type',        payload.property_type],
+        ['Date',        document.getElementById('appt-display').textContent || payload.valuation_date],
+      ];
+      document.getElementById('success-detail').innerHTML = rows
+        .filter(r => r[1])
+        .map(r => `<div class="row"><span class="key">${r[0]}</span><span class="val">${r[1]}</span></div>`)
+        .join('');
+
+    } catch (err) {
+      errEl.textContent = 'Something went wrong submitting your confirmation. Please try again or contact us directly.';
+      errEl.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Confirm Valuation';
+    }
+  });
+</script>
+</body>
+</html>
